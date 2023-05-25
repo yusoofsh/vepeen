@@ -1,13 +1,18 @@
-# fly.toml app configuration file generated for vepeen on 2023-05-23T23:44:58+02:00
+# fly.toml app configuration file generated for vepeen on 2023-05-25T15:56:02+07:00
 #
 # See https://fly.io/docs/reference/configuration/ for information about how to use this file.
 #
 
 app = "vepeen"
+primary_region = "sin"
 kill_signal = "SIGINT"
 
 [env]
   PORT = "41641"
+
+[[mounts]]
+  source = "data"
+  destination = "/var"
 
 [[services]]
   protocol = "udp"
@@ -20,7 +25,3 @@ kill_signal = "SIGINT"
     type = "connections"
     hard_limit = 100
     soft_limit = 75
-
-[mounts]
-  source = "data"
-  destination = "/var"
