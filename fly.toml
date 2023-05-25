@@ -11,8 +11,8 @@ kill_signal = "SIGINT"
   PORT = "41641"
 
 [[mounts]]
-  source = "data"
-  destination = "/var"
+  source = "root"
+  destination = "/"
 
 [[services]]
   protocol = "udp"
