@@ -23,7 +23,8 @@ fi
 
 until /app/tailscale up \
     --authkey=${TAILSCALE_AUTH_KEY} \
-    --hostname=fly-${FLY_REGION} \
+    --hostname=yusoofs-fly${FLY_REGION} \
+    --statedir=/var/lib/tailscale \
     --advertise-exit-node
 do
     sleep 0.1
