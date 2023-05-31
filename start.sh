@@ -24,6 +24,7 @@ fi
 until /app/tailscale up \
     --authkey=${TAILSCALE_AUTH_KEY} \
     --hostname=yusoofs-fly${FLY_REGION} \
+    --advertise-tags=tag:flyexit \
     --advertise-exit-node; do
     sleep 0.1
 done
