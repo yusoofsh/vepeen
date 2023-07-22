@@ -1,14 +1,12 @@
-ARG TSVERSION=1.42.0
+ARG TSVERSION=1.46.0
 ARG TSFILE=tailscale_${TSVERSION}_amd64.tgz
 
 FROM alpine:latest as tailscale
 ARG TSFILE
 WORKDIR /app
 
-RUN wget https://pkgs.tailscale.com/stable/${TSFILE} && \
-  tar xzf ${TSFILE} --strip-components=1
+RUN wget https://pkgs.tailscale.com/stable/${TSFILE} && tar xzf ${TSFILE} --strip-components=1
 COPY . ./
-
 
 FROM alpine:latest
 RUN apk update && apk add ca-certificates iptables ip6tables iproute2 && rm -rf /var/cache/apk/*
