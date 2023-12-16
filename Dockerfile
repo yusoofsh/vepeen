@@ -1,19 +1,26 @@
+ARG TSVERSION=1.54.1
+ARG TSFILE=tailscale_${TSVERSION}_amd64.tgz
+
+FROM alpine:latest as tailscale
+ARG TSFILE
+WORKDIR /app
+
+RUN wget https://pkgs.tailscale.com/stable/${TSFILE} && tar xzf ${TSFILE} --strip-components=1
+COPY . ./
+
 FROM alpine:latest
+RUN apk update && apk add ca-certificates iptables ip6tables iproute2 && rm -rf /var/cache/apk/*
 
-# Setup tailscale
-WORKDIR /tailscale.d
+# creating directories for tailscale
+RUN mkdir -p /var/run/tailscale
+RUN mkdir -p /var/cache/tailscale
+RUN mkdir -p /var/lib/tailscale
 
-COPY start.sh /tailscale.d/start.sh
+# Copy binary to production image
+COPY --from=tailscale /app/tailscaled /app/tailscaled
+COPY --from=tailscale /app/tailscale /app/tailscale
+COPY --from=tailscale /app/start.sh /app/start.sh
 
-ENV TAILSCALE_VERSION "latest"
-ENV TAILSCALE_HOSTNAME "yusoofs-rawa"
-
-RUN wget https://pkgs.tailscale.com/stable/tailscale_${TAILSCALE_VERSION}_amd64.tgz &&
-	tar xzf tailscale_${TAILSCALE_VERSION}_amd64.tgz --strip-components=1
-
-RUN apk update && apk add ca-certificates iptables ip6tables && rm -rf /var/cache/apk/*
-
-RUN mkdir -p /var/run/tailscale /var/cache/tailscale /var/lib/tailscale
-
-RUN chmod +x ./start.sh
-CMD ["./start.sh"]
+# Run on container startup.
+USER root
+CMD ["/app/start.sh"]
