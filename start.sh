@@ -4,7 +4,7 @@ echo 'Starting up...'
 
 # Fix FLY_REGION if undefined or null
 if [ -z "${FLY_REGION}" ]; then
-    FLY_REGION="idn"
+  FLY_REGION="idn"
 fi
 
 # Error handling for iptables command
@@ -19,17 +19,17 @@ iptables -t nat -A POSTROUTING -o eth0 -j MASQUERADE
 ip6tables -t nat -A POSTROUTING -o eth0 -j MASQUERADE
 
 /app/tailscaled \
-    --verbose=1 \
-    --port 41641 \
-    --state=mem: & # ephemeral-node mode (auto-remove)
+  --verbose=1 \
+  --port 41641 \
+  --state=mem: & # ephemeral-node mode (auto-remove)
 #--tun=userspace-networking
 #--socks5-server=localhost:1055
 
 /app/tailscale up \
-    --authkey=${TAILSCALE_AUTH_KEY} \
-    --hostname=yusoofs-${FLY_REGION} \
-    --advertise-tags=tag:vpn \
-    --advertise-exit-node
+  --authkey="${TAILSCALE_AUTH_KEY}" \
+  --hostname=yusoofs-"${FLY_REGION}" \
+  --advertise-tags=tag:exit \
+  --advertise-exit-node
 
 echo "Tailscale started. Let's go!"
 sleep infinity
