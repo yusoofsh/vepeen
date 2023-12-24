@@ -1,0 +1,5 @@
+services:
+  - type: pserv
+    name: tailscale
+    runtime: docker
+    dockerfilePath: ./Dockerfile # optional

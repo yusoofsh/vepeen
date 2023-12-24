@@ -2,11 +2,6 @@
 
 echo 'Starting up...'
 
-# Fix FLY_REGION if undefined or null
-if [ -z "${FLY_REGION}" ]; then
-  FLY_REGION="idn"
-fi
-
 # Error handling for iptables command
 modprobe xt_mark
 
@@ -27,9 +22,8 @@ ip6tables -t nat -A POSTROUTING -o eth0 -j MASQUERADE
 
 /app/tailscale up \
   --authkey="${TAILSCALE_AUTH_KEY}" \
-  --hostname=yusoofs-"${FLY_REGION}" \
   --advertise-tags=tag:exit \
-  --advertise-exit-node
+  --advertise-exit-node # --hostname=yusoofs-"${FLY_REGION}" \
 
 echo "Tailscale started. Let's go!"
 sleep infinity
