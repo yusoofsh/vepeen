@@ -22,5 +22,5 @@ COPY --from=tailscale /app/tailscale /app/tailscale
 COPY --from=tailscale /app/start.sh /app/start.sh
 
 # Run on container startup.
-USER root
+# USER root
 CMD ["/app/start.sh"]
